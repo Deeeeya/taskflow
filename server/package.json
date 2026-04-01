@@ -6,7 +6,10 @@
   "scripts": {
     "dev": "nodemon --exec node --loader ts-node/esm src/index.ts",
     "build": "tsc",
-    "start": "node dist/index.js"
+    "start": "node dist/index.js",
+    "db:push": "prisma db push --schema=prisma/schema.prisma",
+    "db:migrate": "prisma migrate dev --schema=prisma/schema.prisma",
+    "db:studio": "prisma studio --schema=prisma/schema.prisma"
   },
   "keywords": [],
   "author": "",
@@ -20,6 +23,9 @@
     "typescript": "^6.0.2"
   },
   "dependencies": {
-    "express": "^5.2.1"
+    "@prisma/client": "^6.15.0",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "prisma": "^6.15.0"
   }
 }
