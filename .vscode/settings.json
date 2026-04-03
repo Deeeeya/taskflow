@@ -1,2 +1,4 @@
 {
+    "prisma.pinToPrisma6": true,
+    "editor.formatOnSave": true
 }
