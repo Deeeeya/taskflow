@@ -1,6 +1,7 @@
 import express from "express";
 import type { Request, Response } from "express" // ts types
 import authRouter from './routes/auth.routes.js'
+import { authMiddleware } from "./middleware/auth.middleware.js";
 
 const app = express(); // creates server instance
 const PORT = process.env.PORT || 3000 // use the env's port if it exists, otherwise use 3000
@@ -11,6 +12,10 @@ app.use('/api/auth', authRouter) // all auth routes will be prefixed with /api/a
 
 app.get('/', (req: Request, res: Response) => { // test route
     res.json({ message: 'Server is running!' })
+})
+
+app.get('/api/protected', authMiddleware, (req, res) => {
+    res.json({ message: 'You are authorized!' })
 })
 
 app.listen(PORT, () => {
