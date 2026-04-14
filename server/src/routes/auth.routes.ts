@@ -1,5 +1,3 @@
-console.log("Auth routes loaded")
-
 import { Router } from "express";
 import { register, login } from '../controllers/auth.controller.js'
 
