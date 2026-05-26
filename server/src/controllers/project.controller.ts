@@ -7,22 +7,29 @@ export const getProjects = async (req: AuthRequest, res: Response) => {
         const projects = await prisma.project.findMany() // gets all the projects
         return res.status(200).json(projects)
     } catch {
-        res.status(500).json({ error: 'Internal server error' })
+        return res.status(500).json({ error: 'Internal server error' })
     }
 }
 
 export const createProject = async (req: AuthRequest, res: Response) => {
+    console.log('createProject hit!')
+    console.log('userId:', req.userId)
     try {
+        if (!req.userId) {
+            return res.status(401).json({ error: 'Unauthorized' })
+        }
         const { name, description } = req.body // destructures name and description from req.body (which is the data the client sends to your server in the body of a POST/PUT request)
         const newProject = await prisma.project.create({ // creates a new project using the data we destructured in the line above 
             data: {
-                name: name,
-                description: description
+                name,
+                description,
+                userId: req.userId
             }
         })
         return res.status(201).json(newProject)
-    } catch {
-        res.status(500).json({ error: 'Internal server error' })
+    } catch (err) {
+        console.log('Error:', err)
+        return res.status(500).json({ error: 'Internal server error' })
     }
 }
 
@@ -41,7 +48,7 @@ export const updateProject = async (req: AuthRequest, res: Response) => {
         })
         return res.status(200).json(updatedProject)
     } catch {
-        res.status(500).json({ error: 'Internal server error' })
+        return res.status(500).json({ error: 'Internal server error' })
     }
 }
 
@@ -55,6 +62,6 @@ export const deleteProject = async (req: AuthRequest, res: Response) => {
         })
         return res.status(204).send()
     } catch {
-        res.status(500).json({ error: 'Internal server error' })
+        return res.status(500).json({ error: 'Internal server error' })
     }
 }

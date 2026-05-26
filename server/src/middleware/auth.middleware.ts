@@ -6,6 +6,8 @@ export interface AuthRequest extends Request {
 }
 
 export const authMiddleware = async (req: AuthRequest, res: Response, next: NextFunction) => {
+    console.log('Auth middleware hit!')
+    console.log('Authorization header:', req.headers.authorization)
     try {
         const token = req.headers.authorization?.split(" ")[1] // getting the token from the requests header and splitting "Bearer" from <token>
         if (!token) return res.status(401).json({ error: 'No token provided' })
