@@ -12,8 +12,6 @@ export const getProjects = async (req: AuthRequest, res: Response) => {
 }
 
 export const createProject = async (req: AuthRequest, res: Response) => {
-    console.log('createProject hit!')
-    console.log('userId:', req.userId)
     try {
         if (!req.userId) {
             return res.status(401).json({ error: 'Unauthorized' })
