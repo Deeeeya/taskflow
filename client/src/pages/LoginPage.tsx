@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { Button } from "@/components/ui/button"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Mail, Lock, CheckSquare } from 'lucide-react'
 
 const LoginPage = () => {
     const [email, setEmail] = useState('')
@@ -37,23 +38,44 @@ const LoginPage = () => {
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-backround">
-            <Card className="w-[420px]">
-                <CardHeader>
-                    <CardTitle className="text-center text-2xl">Login</CardTitle>
-                </CardHeader>
-                <CardContent className="flex flex-col gap-4">
-                    <div className="flex flex-col gap-2">
-                        <Label className="px-2" htmlFor="email">Email</Label>
-                        <Input className="rounded-full" id="email" type="email" placeholder="Enter your email" value={email} onChange={(e) => setEmail(e.target.value)} /> {/* this is controlled input, react re-renders the component every time the state changes, same with line below */}
-                    </div>
-                    <div className="flex flex-col gap-2">
-                        <Label className="px-2" htmlFor="password">Password</Label>
-                        <Input className="rounded-full" id="password" type="password" placeholder="Enter your password" value={password} onChange={(e) => setPassword(e.target.value)} /> {/* this is controlled input, react re-renders the component every time the state changes, same with line below */}
-                    </div>
-                    <Button onClick={handleLogin} className="w-full rounded-full">Login</Button>
-                    {error && <p className="text-destructive text-sm text-center">{error}</p>} {/* this is conditional rendering: the error paragraph only appears when there is a failed login */}
-                </CardContent>
-            </Card>
+            <div className="flex flex-col items-center">
+                {/* Branding */}
+                <div className="flex flex-col items-center mb-6">
+                    <CheckSquare className="text-primary w-10 h-10 mb-2" />
+                    <h1 className="text-2xl font-bold text-white">Taskflow</h1>
+                </div>
+                {/* Card */}
+                <Card className="w-[420px] border border-primary/30 shadow-lg shadow-primary/10">
+                    <CardHeader>
+                        <CardTitle className="text-center text-2xl">Login</CardTitle>
+                        <p className="text-muted-foreground text-sm text-center">Welcome back, sign in to continue</p>
+                    </CardHeader>
+                    <CardContent className="flex flex-col gap-4">
+                        {/* Email Input */}
+                        <div className="flex flex-col gap-2">
+                            <Label className="px-2" htmlFor="email">Email</Label>
+                            <div className="relative">
+                                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
+                                <Input className="rounded-full pl-9" id="email" type="email" placeholder="Enter your email" value={email} onChange={(e) => setEmail(e.target.value)} /> {/* this is controlled input, react re-renders the component every time the state changes, same with line below */}
+                            </div>
+                        </div>
+                        {/* Password Input */}
+                        <div className="flex flex-col gap-2">
+                            <Label className="px-2" htmlFor="password">Password</Label>
+                            <div className="relative">
+                                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
+                                <Input className="rounded-full pl-9" id="password" type="password" placeholder="Enter your password" value={password} onChange={(e) => setPassword(e.target.value)} /> {/* this is controlled input, react re-renders the component every time the state changes, same with line below */}
+                            </div>
+                        </div>
+                        {/* Button */}
+                        <Button onClick={handleLogin} className="w-full rounded-full">Login</Button>
+                        <p className="text-sm text-muted-foreground">
+                            Don't have an account? <Link to="/register" className="text-primary hover:underline">Register</Link>
+                        </p>
+                        {error && <p className="text-destructive text-sm text-center">{error}</p>} {/* this is conditional rendering: the error paragraph only appears when there is a failed login */}
+                    </CardContent>
+                </Card>
+            </div>
         </div>
     )
 }
