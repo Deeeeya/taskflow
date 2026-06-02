@@ -39,7 +39,7 @@ const RegisterPage = () => {
                 {/* Branding */}
                 <div className="flex flex-col items-center mb-6">
                     <CheckSquare className="text-primary w-10 h-10 mb-2" />
-                    <CardTitle className="text-2xl font-bold text-white">Taskflow</CardTitle>
+                    <CardTitle className="text-2xl font-bold text-foreground">Taskflow</CardTitle>
                 </div>
                 {/* Card */}
                 <Card className="w-[420px] border border-primary/30 shadow-lg shadow-primary/10">

@@ -42,7 +42,7 @@ const LoginPage = () => {
                 {/* Branding */}
                 <div className="flex flex-col items-center mb-6">
                     <CheckSquare className="text-primary w-10 h-10 mb-2" />
-                    <h1 className="text-2xl font-bold text-white">Taskflow</h1>
+                    <h1 className="text-2xl font-bold text-foreground">Taskflow</h1>
                 </div>
                 {/* Card */}
                 <Card className="w-[420px] border border-primary/30 shadow-lg shadow-primary/10">

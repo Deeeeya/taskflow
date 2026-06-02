@@ -45,7 +45,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => { // the compone
 export const useAuth = () => { // this is a custom hook - a reusable function that wraps existing React hooks to make then easier to use
     const context = useContext(AuthContext) // this is how a component reads from the global state, it looks at the nearest AuthContext.Provider above it in the component trree and returns whatever is in its value. So it gives you back { user, token, login, logout, isAuthenticated }
     if (!context) throw new Error('useAuth must be used within AuthProvider') // a safety check
-    return context // returns all the auth data so the component cqn use it
+    return context // returns all the auth data so the component can use it
 }
 
 export default AuthProvider
