@@ -15,6 +15,7 @@ const DashboardPage = () => {
     const [projects, setProjects] = useState<Project[]>([]) // stores the array of projects fetched from the API, starts empty
     const [activeProjectId, setActiveProjectId] = useState<string | null>(null) // tracks which project is selected in the sidebar, starts as null
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false) // tracks whether the create project modal is open, starts as false
+    const [isCollapsed, setIsCollapsed] = useState<boolean>(false) // tracks if the sidebar is collapsed or not
     const [error, setError] = useState('') // stores any error messages to display to the user
 
     useEffect(() => { // runs the fetchProjects function whenever token changes
@@ -40,14 +41,16 @@ const DashboardPage = () => {
     }, [token]) // if token is null on first render, the effect won't fetch, and once the token is set, the effect re-runs and fetches the projects
 
     return (
-        <div className="min-h-screen bg-background">
+        <div className="h-screen flex">
             <Sidebar
                 projects={projects} // passing our projects state array to the Sidebar so it can display the list of projects, we defined projects as a prop in Sidebar.tsx
                 activeProjectId={activeProjectId} // we're passing which project is currently selected
                 onSelectProject={(id) => setActiveProjectId(id)} // when a user clicks a project in the sidebar, the sidebar calls onSelectProject(project.id), it triggers setActiveProjectId(id) which updates our state in DashboardPage
                 onNewProject={() => setIsModalOpen(true)} // when we click the 'New Project' button, it sets isModalOpen to true which will open a modal to create a new project
+                isCollapsed={isCollapsed}
+                onToggleCollapse={() => setIsCollapsed(!isCollapsed)}
             />
-            <main className="ml-64 pt-14 p-6">
+            <main className="ml-64 pt-14 pt-6 px-6">
                 <h1>Dashboard</h1>
             </main>
         </div>
