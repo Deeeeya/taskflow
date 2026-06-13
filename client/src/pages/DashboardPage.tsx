@@ -50,7 +50,7 @@ const DashboardPage = () => {
                 isCollapsed={isCollapsed}
                 onToggleCollapse={() => setIsCollapsed(!isCollapsed)}
             />
-            <main className="ml-64 pt-14 pt-6 px-6">
+            <main className={`pt-6 px-6 transition-all duration-300 ease-in-out ${isCollapsed ? 'ml-10' : 'ml-64'}`}>
                 <h1>Dashboard</h1>
             </main>
         </div>
