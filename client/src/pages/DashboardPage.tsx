@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"
 import { Sidebar } from "@/components/Sidebar"
+import { CreateProjectModal } from "@/components/CreateProjectModal"
 import { useAuth } from "@/context/AuthContext"
 
 interface Project {
@@ -47,10 +48,16 @@ const DashboardPage = () => {
                 activeProjectId={activeProjectId} // we're passing which project is currently selected
                 onSelectProject={(id) => setActiveProjectId(id)} // when a user clicks a project in the sidebar, the sidebar calls onSelectProject(project.id), it triggers setActiveProjectId(id) which updates our state in DashboardPage
                 onNewProject={() => setIsModalOpen(true)} // when we click the 'New Project' button, it sets isModalOpen to true which will open a modal to create a new project
-                isCollapsed={isCollapsed}
-                onToggleCollapse={() => setIsCollapsed(!isCollapsed)}
+                isCollapsed={isCollapsed} // we're passing current collapse state down to Sidebar so it knows whether to show full width version or narrow icon-only version
+                onToggleCollapse={() => setIsCollapsed(!isCollapsed)} // callback function we pass to the Sidebar's collapse button. When clicked, it calls onToggleCollapse which runs 'setIsCollapsed(!isCollapsed) flipping the boolean (this is called toggling)
             />
-            <main className={`pt-6 px-6 transition-all duration-300 ease-in-out ${isCollapsed ? 'ml-10' : 'ml-64'}`}>
+            <CreateProjectModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onProjectCreated={(project) => setProjects([...projects, project])} // updates the React state on the frontend, '...projects' is the spread operator, while project is the newly created project returned from the API
+                // 'setProjects([...projects, project])' creates a brand new array with all the old projects plus the new one, and updates the state
+            />
+            <main className={`${isCollapsed ? 'ml-16' : 'ml-64'} pt-6 px-6 flex-1`}>
                 <h1>Dashboard</h1>
             </main>
         </div>
