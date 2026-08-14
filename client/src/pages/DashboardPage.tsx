@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import { Sidebar } from "@/components/Sidebar"
 import { CreateProjectModal } from "@/components/CreateProjectModal"
+import { KanbanBoard } from "@/components/KanbanBoard"
 import { useAuth } from "@/context/AuthContext"
 
 interface Project {
@@ -55,10 +56,10 @@ const DashboardPage = () => {
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 onProjectCreated={(project) => setProjects([...projects, project])} // updates the React state on the frontend, '...projects' is the spread operator, while project is the newly created project returned from the API
-                // 'setProjects([...projects, project])' creates a brand new array with all the old projects plus the new one, and updates the state
+            // 'setProjects([...projects, project])' creates a brand new array with all the old projects plus the new one, and updates the state
             />
-            <main className={`${isCollapsed ? 'ml-16' : 'ml-64'} pt-6 px-6 flex-1`}>
-                <h1>Dashboard</h1>
+            <main className={`${isCollapsed ? 'ml-10' : 'ml-64'} pt-6 px-6 flex-1 overflow-x-auto transition-all duration-300 ease-in-out`}>
+                {activeProjectId ? <KanbanBoard projectId={activeProjectId} /> : <p className="text-muted-foreground">Select a project to get started</p>}
             </main>
         </div>
     )
