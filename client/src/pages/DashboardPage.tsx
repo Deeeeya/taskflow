@@ -2,7 +2,10 @@ import { useState, useEffect } from "react"
 import { Sidebar } from "@/components/Sidebar"
 import { CreateProjectModal } from "@/components/CreateProjectModal"
 import { KanbanBoard } from "@/components/KanbanBoard"
+import { ListView } from "@/components/ListView"
 import { useAuth } from "@/context/AuthContext"
+import { Button } from "@/components/ui/button"
+import { LayoutGrid, List } from "lucide-react"
 
 interface Project {
     id: string,
@@ -19,6 +22,7 @@ const DashboardPage = () => {
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false) // tracks whether the create project modal is open, starts as false
     const [isCollapsed, setIsCollapsed] = useState<boolean>(false) // tracks if the sidebar is collapsed or not
     const [error, setError] = useState('') // stores any error messages to display to the user
+    const [view, setView] = useState<'board' | 'list'>('board')
 
     useEffect(() => { // runs the fetchProjects function whenever token changes
         const fetchProjects = async () => { // an async function that makes a GET request to the backend with the JWT token in the header
@@ -59,7 +63,19 @@ const DashboardPage = () => {
             // 'setProjects([...projects, project])' creates a brand new array with all the old projects plus the new one, and updates the state
             />
             <main className={`${isCollapsed ? 'ml-10' : 'ml-64'} pt-6 px-6 flex-1 overflow-x-auto transition-all duration-300 ease-in-out`}>
-                {activeProjectId ? <KanbanBoard projectId={activeProjectId} /> : <p className="text-muted-foreground">Select a project to get started</p>}
+                {activeProjectId ? (
+                    <div>
+                        {/* Header with Toggle Buttons */}
+                        <div className="mb-4 flew items-center gap-2">
+                            <Button className={`rounded-md ${view === 'board' ? 'bg-primary/10 text-primary' : ''}`} variant="ghost" onClick={() => setView('board')}><LayoutGrid /></Button> {/* Board View */}
+                            <Button className={`rounded-md ${view === 'list' ? 'bg-primary/10 text-primary' : ''}`} variant="ghost" onClick={() => setView('list')}><List /></Button> {/* List View */}
+                        </div>
+                        {/* Board or List based on view state */}
+                        {view === 'board' ? <KanbanBoard projectId={activeProjectId} /> : <ListView projectId={activeProjectId} />}
+                    </div>
+                ) : (
+                    <p className="text-muted-foreground">Select a project to get started</p>
+                )}
             </main>
         </div>
     )

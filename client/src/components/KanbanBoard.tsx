@@ -349,7 +349,7 @@ export const KanbanBoard = ({ projectId }: KanbanBoardProps) => {
             setEditTitle(selectedTask.title)
             setEditDescription(selectedTask.description ?? '') // description can be null so use '' to fall back to an empty string
             setEditPriority(selectedTask.priority)
-            setEditDueDate(selectedTask.dueDate ?? '')
+            setEditDueDate(selectedTask.dueDate ? selectedTask.dueDate.split('T')[0] : '')
         } else {
             setEditTitle('')
             setEditDescription('') // description can be null so use '' to fall back to an empty string
@@ -382,7 +382,7 @@ export const KanbanBoard = ({ projectId }: KanbanBoardProps) => {
                     title: editTitle,
                     description: editDescription,
                     priority: editPriority,
-                    dueDate: editDueDate || null
+                    dueDate: editDueDate ? new Date(editDueDate).toISOString() : null
                 })
             })
 
