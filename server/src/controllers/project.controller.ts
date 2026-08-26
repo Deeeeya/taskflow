@@ -4,7 +4,15 @@ import type { AuthRequest } from '../middleware/auth.middleware.js'
 
 export const getProjects = async (req: AuthRequest, res: Response) => {
     try {
-        const projects = await prisma.project.findMany() // gets all the projects
+        if (!req.userId) {
+            return res.status(401).json({ error: 'Unauthorized' })
+        }
+
+        const projects = await prisma.project.findMany({
+            where: {
+                userId: req.userId
+            }
+        }) // gets all the projects
         return res.status(200).json(projects)
     } catch {
         return res.status(500).json({ error: 'Internal server error' })

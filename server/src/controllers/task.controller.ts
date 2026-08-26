@@ -2,6 +2,26 @@ import type { Response } from 'express'
 import prisma from '../lib/prisma.js'
 import type { AuthRequest } from '../middleware/auth.middleware.js'
 
+export const getAllTasks = async (req: AuthRequest, res: Response) => { // function used to get all tasks across all projects
+    try {
+        if (!req.userId) {
+            return res.status(401).json({ error: 'Unauthorized' })
+        }
+
+        const allTasks = await prisma.task.findMany({
+            where: {
+                project: {
+                    userId: req.userId
+                }
+            }
+        })
+
+        return res.status(200).json(allTasks)
+    } catch {
+        return res.status(500).json({ error: 'Internal server error' })
+    }
+}
+
 export const getTasks = async (req: AuthRequest, res: Response) => {
     try {
         const { projectId } = req.params as { projectId: string }

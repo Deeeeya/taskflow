@@ -3,6 +3,7 @@ import type { Request, Response } from "express" // ts types
 import authRouter from './routes/auth.routes.js'
 import projectRouter from './routes/project.routes.js'
 import taskRouter from './routes/task.routes.js'
+import globalRouter from './routes/global.routes.js'
 import cors from 'cors'
 
 const app = express(); // creates server instance
@@ -17,6 +18,8 @@ app.use('/api/auth', authRouter) // all auth routes will be prefixed with /api/a
 app.use('/api/projects', projectRouter) // all project routes are prefixed with /api/projects
 
 app.use('/api/projects/:projectId/tasks', taskRouter) // all task routes are prefixed with /api/projects/:projectId/tasks
+
+app.use('/api/tasks', globalRouter) // all tasks across all projects
 
 app.get('/', (req: Request, res: Response) => { // test route
     res.json({ message: 'Server is running!' })
