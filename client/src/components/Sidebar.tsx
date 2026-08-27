@@ -10,9 +10,10 @@ interface SidebarProps { // props interface
     onSelectProject: (id: string) => void
     isCollapsed: boolean, // this and the prop below will be used to control the sidebar collapse behavior
     onToggleCollapse: () => void
+    onSelectView: (view: 'inbox' | 'today' | 'upcoming' | 'completed') => void
 }
 
-export const Sidebar = ({ projects, onNewProject, activeProjectId, onSelectProject, isCollapsed, onToggleCollapse }: SidebarProps) => {
+export const Sidebar = ({ projects, onNewProject, activeProjectId, onSelectProject, isCollapsed, onToggleCollapse, onSelectView }: SidebarProps) => {
     const { user, logout } = useAuth()
     const { theme, toggleTheme } = useTheme()
 
@@ -40,19 +41,19 @@ export const Sidebar = ({ projects, onNewProject, activeProjectId, onSelectProje
             {/* Smart Views Nav Section */}
             <nav className={`p-2 flex flex-col gap-1 ${section}`}>
                 <p className="text-xs text-muted-foreground uppercase font-medium pl-2 pb-1 whitespace-nowrap">SMART VIEWS</p>
-                <Button className="w-full flex items-center justify-start gap-2 px-2 py-1.5 rounded-md text-sm font-normal" variant="ghost">
+                <Button className="w-full flex items-center justify-start gap-2 px-2 py-1.5 rounded-md text-sm font-normal" variant="ghost" onClick={() => onSelectView('inbox')}>
                     <Inbox className="w-4 h-4 shrink-0" />
                     <span className="whitespace-nowrap">Inbox</span>
                 </Button>
-                <Button className="w-full flex items-center justify-start gap-2 px-2 py-1.5 rounded-md text-sm font-normal" variant="ghost">
+                <Button className="w-full flex items-center justify-start gap-2 px-2 py-1.5 rounded-md text-sm font-normal" variant="ghost" onClick={() => onSelectView('today')}>
                     <Calendar className="w-4 h-4 shrink-0" />
                     <span className="whitespace-nowrap">Today</span>
                 </Button>
-                <Button className="w-full flex items-center justify-start gap-2 px-2 py-1.5 rounded-md text-sm font-normal" variant="ghost">
+                <Button className="w-full flex items-center justify-start gap-2 px-2 py-1.5 rounded-md text-sm font-normal" variant="ghost" onClick={() => onSelectView('upcoming')}>
                     <CalendarDays className="w-4 h-4 shrink-0" />
                     <span className="whitespace-nowrap">Upcoming</span>
                 </Button>
-                <Button className="w-full flex items-center justify-start gap-2 px-2 py-1.5 rounded-md text-sm font-normal" variant="ghost">
+                <Button className="w-full flex items-center justify-start gap-2 px-2 py-1.5 rounded-md text-sm font-normal" variant="ghost" onClick={() => onSelectView('completed')}>
                     <CheckCircle2 className="w-4 h-4 shrink-0" />
                     <span className="whitespace-nowrap">Completed</span>
                 </Button>
