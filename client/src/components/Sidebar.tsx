@@ -2,18 +2,20 @@ import { Plus, Inbox, Calendar, CalendarDays, CheckCircle2, Hash, Settings, Tras
 import { Button } from "./ui/button";
 import { useAuth } from "@/context/AuthContext";
 import { useTheme } from "@/context/ThemeContext";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator, DropdownMenuLabel } from "./ui/dropdown-menu";
 
 interface SidebarProps { // props interface
     projects: { id: string, name: string }[], // projects type is a tuple
-    onNewProject: () => void, // a function that takes no arguments and returns voide
+    onNewProject: () => void, // a function that takes no arguments and returns void
     activeProjectId: string | null,
     onSelectProject: (id: string) => void
     isCollapsed: boolean, // this and the prop below will be used to control the sidebar collapse behavior
     onToggleCollapse: () => void
     onSelectView: (view: 'inbox' | 'today' | 'upcoming' | 'completed') => void
+    onOpenSettings: () => void
 }
 
-export const Sidebar = ({ projects, onNewProject, activeProjectId, onSelectProject, isCollapsed, onToggleCollapse, onSelectView }: SidebarProps) => {
+export const Sidebar = ({ projects, onNewProject, activeProjectId, onSelectProject, isCollapsed, onToggleCollapse, onSelectView, onOpenSettings }: SidebarProps) => {
     const { user, logout } = useAuth()
     const { theme, toggleTheme } = useTheme()
 
@@ -27,12 +29,32 @@ export const Sidebar = ({ projects, onNewProject, activeProjectId, onSelectProje
 
             {/* Avatar Row */}
             <div className="flex items-center h-14 transition-all duration-300 ease-in-out">
-                <div className={`flex items-center gap-2 overflow-hidden transition-all duration-300 ease-in-out ${isCollapsed ? 'w-0 opacity-0' : 'w-full pl-3 opacity-100'}`}>
-                    <div className="w-8 h-8 rounded-full bg-primary text-primary-foreground flex justify-center items-center text-sm font-bold shrink-0">
-                        {initial}
-                    </div>
-                    <span className="text-sm font-medium whitespace-nowrap">{user?.name}</span>
-                </div>
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <div className={`flex items-center gap-2 overflow-hidden transition-all duration-300 ease-in-out cursor-pointer ml-2
+                            data-[state=open]:bg-accent data-[state=open]:rounded-md data-[state=open]:py-1 data-[state=open]:px-2 ${isCollapsed ? 'w-0 opacity-0' : 'w-full flex-1 pl-3 opacity-100'}`}>
+                            <div className="w-8 h-8 rounded-full bg-primary text-primary-foreground flex justify-center items-center text-sm font-bold shrink-0">
+                                {initial}
+                            </div>
+                            <span className="text-sm font-medium whitespace-nowrap">{user?.name}</span>
+                        </div>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="start" className="min-w-0">
+                        <DropdownMenuLabel>
+                            {user?.name}
+                        </DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem onClick={() => onOpenSettings()}> {/* opens the settings modal when clicked */}
+                            <Settings className="w-4 h-4 mr-2" />
+                            Settings
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem onClick={logout}>
+                            <LogOut className="w-4 h-4 mr-2" />
+                            Log out
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
                 <Button variant="ghost" size="icon-lg" onClick={onToggleCollapse} className={`shrink-0 rounded-md transition-all duration-300 ease-in-out ${isCollapsed ? '' : 'mr-2'}`}>
                     {isCollapsed ? <PanelLeftOpen className="w-4 h-4" /> : <PanelLeftClose className="w-4 h-4" />}
                 </Button>
@@ -57,6 +79,10 @@ export const Sidebar = ({ projects, onNewProject, activeProjectId, onSelectProje
                     <CheckCircle2 className="w-4 h-4 shrink-0" />
                     <span className="whitespace-nowrap">Completed</span>
                 </Button>
+                <Button variant="ghost" className="w-full flex items-center justify-start gap-2 px-2 py-1.5 rounded-md text-xs">
+                    <Trash2 className="w-4 h-4 shrink-0" />
+                    <span className="whitespace-nowrap">Trash</span>
+                </Button>
             </nav>
 
             {/* My Projects */}
@@ -77,19 +103,6 @@ export const Sidebar = ({ projects, onNewProject, activeProjectId, onSelectProje
                         <span className="whitespace-nowrap">{project.name}</span>
                     </Button>
                 ))}
-            </div>
-
-            {/* General Section */}
-            <div className={`p-2 flex flex-col gap-1 ${section}`}>
-                <p className="text-xs text-muted-foreground uppercase font-medium pl-2 pb-1 whitespace-nowrap">GENERAL</p>
-                <Button variant="ghost" className="w-full flex items-center justify-start gap-2 px-2 py-1.5 rounded-md text-xs">
-                    <Settings className="w-4 h-4 shrink-0" />
-                    <span className="whitespace-nowrap">Settings</span>
-                </Button>
-                <Button variant="ghost" className="w-full flex items-center justify-start gap-2 px-2 py-1.5 rounded-md text-xs">
-                    <Trash2 className="w-4 h-4 shrink-0" />
-                    <span className="whitespace-nowrap">Trash</span>
-                </Button>
             </div>
 
             {/* Bottom Section */}

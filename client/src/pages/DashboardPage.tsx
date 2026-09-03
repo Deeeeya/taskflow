@@ -7,6 +7,7 @@ import { SmartView } from "@/components/SmartView"
 import { useAuth } from "@/context/AuthContext"
 import { Button } from "@/components/ui/button"
 import { LayoutGrid, List } from "lucide-react"
+import { SettingsPage } from "./SettingsPage"
 
 interface Project {
     id: string,
@@ -25,6 +26,7 @@ const DashboardPage = () => {
     const [error, setError] = useState('') // stores any error messages to display to the user
     const [view, setView] = useState<'board' | 'list'>('board')
     const [activeView, setActiveView] = useState<'inbox' | 'today' | 'upcoming' | 'completed' | null>(null)
+    const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false)
 
     console.log(activeView)
 
@@ -66,6 +68,7 @@ const DashboardPage = () => {
                     setActiveView(view)
                     setActiveProjectId(null)
                 }} // passing onSelectView on to the Sidebar component
+                onOpenSettings={() => setIsSettingsOpen(true)}
             />
             <CreateProjectModal
                 isOpen={isModalOpen}
@@ -73,6 +76,7 @@ const DashboardPage = () => {
                 onProjectCreated={(project) => setProjects([...projects, project])} // updates the React state on the frontend, '...projects' is the spread operator, while project is the newly created project returned from the API
             // 'setProjects([...projects, project])' creates a brand new array with all the old projects plus the new one, and updates the state
             />
+            <SettingsPage isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
             <main className={`${isCollapsed ? 'ml-10' : 'ml-64'} pt-6 px-6 flex-1 overflow-x-auto transition-all duration-300 ease-in-out`}>
                 {activeView ? (
                     <SmartView view={activeView} />) : activeProjectId ? (
@@ -87,7 +91,6 @@ const DashboardPage = () => {
                         </div>
                     ) : (
                     <p className="text-muted-foreground">Select a project to get started</p>
-
                 )}
             </main>
         </div>
