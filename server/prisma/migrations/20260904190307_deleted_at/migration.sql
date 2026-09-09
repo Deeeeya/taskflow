@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "public"."Task" ADD COLUMN     "deletedAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP;
