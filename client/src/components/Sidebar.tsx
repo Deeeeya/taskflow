@@ -11,7 +11,7 @@ interface SidebarProps { // props interface
     onSelectProject: (id: string) => void
     isCollapsed: boolean, // this and the prop below will be used to control the sidebar collapse behavior
     onToggleCollapse: () => void
-    onSelectView: (view: 'inbox' | 'today' | 'upcoming' | 'completed') => void
+    onSelectView: (view: 'inbox' | 'today' | 'upcoming' | 'completed' | 'trash') => void
     onOpenSettings: () => void
 }
 
@@ -79,7 +79,7 @@ export const Sidebar = ({ projects, onNewProject, activeProjectId, onSelectProje
                     <CheckCircle2 className="w-4 h-4 shrink-0" />
                     <span className="whitespace-nowrap">Completed</span>
                 </Button>
-                <Button variant="ghost" className="w-full flex items-center justify-start gap-2 px-2 py-1.5 rounded-md text-xs">
+                <Button className="w-full flex items-center justify-start gap-2 px-2 py-1.5 rounded-md text-xs" variant="ghost" onClick={() => onSelectView('trash')}>
                     <Trash2 className="w-4 h-4 shrink-0" />
                     <span className="whitespace-nowrap">Trash</span>
                 </Button>

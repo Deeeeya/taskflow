@@ -8,6 +8,7 @@ import { useAuth } from "@/context/AuthContext"
 import { Button } from "@/components/ui/button"
 import { LayoutGrid, List } from "lucide-react"
 import { SettingsPage } from "./SettingsPage"
+import { TrashView } from "@/components/TrashView"
 
 interface Project {
     id: string,
@@ -25,7 +26,7 @@ const DashboardPage = () => {
     const [isCollapsed, setIsCollapsed] = useState<boolean>(false) // tracks if the sidebar is collapsed or not
     const [error, setError] = useState('') // stores any error messages to display to the user
     const [view, setView] = useState<'board' | 'list'>('board')
-    const [activeView, setActiveView] = useState<'inbox' | 'today' | 'upcoming' | 'completed' | null>(null)
+    const [activeView, setActiveView] = useState<'inbox' | 'today' | 'upcoming' | 'completed' | 'trash' | null>(null)
     const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false)
 
     console.log(activeView)
@@ -78,7 +79,7 @@ const DashboardPage = () => {
             />
             <SettingsPage isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
             <main className={`${isCollapsed ? 'ml-10' : 'ml-64'} pt-6 px-6 flex-1 overflow-x-auto transition-all duration-300 ease-in-out`}>
-                {activeView ? (
+                {activeView === 'trash' ? <TrashView /> : activeView ? (
                     <SmartView view={activeView} />) : activeProjectId ? (
                         <div>
                             {/* Header with Toggle Buttons */}
