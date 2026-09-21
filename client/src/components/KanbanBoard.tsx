@@ -16,7 +16,7 @@ import {
 } from "@dnd-kit/sortable";
 import { useDroppable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
-import { Plus, Calendar, X, Trash2 } from "lucide-react";
+import { Plus, Calendar, X, Trash2, Loader2 } from "lucide-react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
@@ -313,6 +313,7 @@ export const KanbanBoard = ({ projectId }: KanbanBoardProps) => {
     const { token } = useAuth()
     const [tasks, setTasks] = useState<Task[]>([])
     const [error, setError] = useState<string>('')
+    const [isLoading, setIsLoading] = useState(true)
     const [activeTask, setActiveTask] = useState<Task | null>(null)
     const [selectedTask, setSelectedTask] = useState<Task | null>(null)
     const [editTitle, setEditTitle] = useState<string>('')
@@ -339,6 +340,8 @@ export const KanbanBoard = ({ projectId }: KanbanBoardProps) => {
                 }
             } catch {
                 setError('Something went wrong')
+            } finally {
+                setIsLoading(false)
             }
         }
         fetchTasks()
@@ -494,6 +497,14 @@ export const KanbanBoard = ({ projectId }: KanbanBoardProps) => {
         if (!targetStatus || targetStatus === task.status) return
 
         updateTaskStatus(activeTaskId, targetStatus)
+    }
+
+    if (isLoading) {
+        return (
+            <div className="w-full flex items-center justify-center py-16">
+                <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+            </div>
+        )
     }
 
     return (

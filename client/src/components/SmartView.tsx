@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { useAuth } from "@/context/AuthContext";
-import { Circle, Calendar } from "lucide-react";
+import { Circle, Calendar, Loader2 } from "lucide-react";
 
 interface Task {
     id: string,
@@ -56,6 +56,7 @@ export const SmartView = ({ view }: SmartViewProps) => {
     const { token } = useAuth()
     const [tasks, setTasks] = useState<Task[]>([])
     const [error, setError] = useState<string>('')
+    const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
         const fetchTasks = async () => {
@@ -74,6 +75,8 @@ export const SmartView = ({ view }: SmartViewProps) => {
                 }
             } catch {
                 setError('Something went wrong')
+            } finally {
+                setIsLoading(false)
             }
         }
         fetchTasks()
@@ -104,6 +107,14 @@ export const SmartView = ({ view }: SmartViewProps) => {
                 return tasks
         }
     }, [tasks, view, inboxTasks, todayTasks, upcomingTasks, completedTasks])
+
+    if (isLoading) {
+        return (
+            <div className="w-full flex items-center justify-center py-16">
+                <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+            </div>
+        )
+    }
 
     return (
         <div className="w-full flex flex-col gap-4">

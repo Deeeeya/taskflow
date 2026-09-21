@@ -1,6 +1,6 @@
 import { useAuth } from "@/context/AuthContext";
 import { useState, useEffect } from "react";
-import { Trash2, RotateCcw, Calendar } from "lucide-react";
+import { Trash2, RotateCcw, Calendar, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "./ui/dialog";
 
@@ -33,6 +33,7 @@ export const TrashView = () => {
     const [tasks, setTasks] = useState<Task[]>([])
     const [taskToDelete, setTaskToDelete] = useState<string | null>(null) // stores the id of the task the user wants to permanently delete
     const [error, setError] = useState<string>('')
+    const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
         const fetchTasks = async () => {
@@ -51,6 +52,8 @@ export const TrashView = () => {
                 }
             } catch {
                 setError('Something went wrong')
+            } finally {
+                setIsLoading(false)
             }
         }
         fetchTasks()
@@ -96,6 +99,14 @@ export const TrashView = () => {
         } catch {
             setError('Something went wrong')
         }
+    }
+
+    if (isLoading) {
+        return (
+            <div className="w-full flex items-center justify-center py-16">
+                <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+            </div>
+        )
     }
 
     return (

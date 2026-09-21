@@ -1,6 +1,6 @@
 import { useAuth } from "@/context/AuthContext";
 import { useState, useEffect, useMemo } from "react";
-import { Circle, Calendar } from "lucide-react";
+import { Circle, Calendar, Loader2 } from "lucide-react";
 
 interface Task {
     id: string,
@@ -63,6 +63,7 @@ export const ListView = ({ projectId }: ListViewProps) => {
     const { token } = useAuth()
     const [tasks, setTasks] = useState<Task[]>([])
     const [error, setError] = useState('')
+    const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
         const fetchTasks = async () => {
@@ -81,6 +82,8 @@ export const ListView = ({ projectId }: ListViewProps) => {
                 }
             } catch {
                 setError('Something went wrong')
+            } finally {
+                setIsLoading(false)
             }
         }
         fetchTasks()
@@ -89,6 +92,14 @@ export const ListView = ({ projectId }: ListViewProps) => {
     const todoTasks = useMemo(() => tasks.filter((task) => task.status === 'todo'), [tasks])
     const inProgressTasks = useMemo(() => tasks.filter((task) => task.status === 'in_progress'), [tasks])
     const doneTasks = useMemo(() => tasks.filter((task) => task.status === 'done'), [tasks])
+
+    if (isLoading) {
+        return (
+            <div className="w-full flex items-center justify-center py-16">
+                <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+            </div>
+        )
+    }
 
     return (
         <div className="w-full flex flex-col gap-4">
