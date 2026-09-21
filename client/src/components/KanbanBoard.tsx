@@ -382,7 +382,7 @@ export const KanbanBoard = ({ projectId }: KanbanBoardProps) => {
                     title: editTitle,
                     description: editDescription,
                     priority: editPriority,
-                    dueDate: editDueDate ? new Date(editDueDate).toISOString() : null
+                    dueDate: editDueDate ? new Date(editDueDate + 'T12:00:00').toISOString() : null
                 })
             })
 

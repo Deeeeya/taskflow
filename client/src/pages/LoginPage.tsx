@@ -56,7 +56,9 @@ const LoginPage = () => {
                             <Label className="px-2" htmlFor="email">Email</Label>
                             <div className="relative">
                                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
-                                <Input className="rounded-full pl-9" id="email" type="email" placeholder="Enter your email" value={email} onChange={(e) => setEmail(e.target.value)} /> {/* this is controlled input, react re-renders the component every time the state changes, same with line below */}
+                                <Input className="rounded-full pl-9" id="email" type="email" placeholder="Enter your email" value={email} onChange={(e) => setEmail(e.target.value)} onKeyDown={(e) => {
+                                    if (e.key === "Enter") handleLogin()
+                                }} /> {/* this is controlled input, react re-renders the component every time the state changes, same with line below */}
                             </div>
                         </div>
                         {/* Password Input */}
@@ -64,7 +66,9 @@ const LoginPage = () => {
                             <Label className="px-2" htmlFor="password">Password</Label>
                             <div className="relative">
                                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
-                                <Input className="rounded-full pl-9" id="password" type="password" placeholder="Enter your password" value={password} onChange={(e) => setPassword(e.target.value)} /> {/* this is controlled input, react re-renders the component every time the state changes, same with line below */}
+                                <Input className="rounded-full pl-9" id="password" type="password" placeholder="Enter your password" value={password} onChange={(e) => setPassword(e.target.value)} onKeyDown={(e) => {
+                                    if (e.key === "Enter") handleLogin()
+                                }} /> {/* this is controlled input, react re-renders the component every time the state changes, same with line below */}
                             </div>
                         </div>
                         {/* Button */}

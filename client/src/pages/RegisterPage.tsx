@@ -6,6 +6,23 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
+const getPasswordStrength = (password: string) => {
+    let score = 0
+    if (password.length >= 8) score++
+    if (/[A-Z]/.test(password)) score++
+    if (/[0-9]/.test(password)) score++
+    if (/[!@#$%^&*]/.test(password)) score++
+    return score
+}
+
+const STRENGTH_COLORS: Record<number, string> = {
+    0: "bg-red-500",
+    1: "bg-red-500",
+    2: "bg-amber-500",
+    3: "bg-yellow-500",
+    4: "bg-green-500",
+}
+
 const RegisterPage = () => {
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
@@ -15,6 +32,24 @@ const RegisterPage = () => {
 
     const handleRegister = async () => {
         try {
+            if (name === '') { setError('Name is required'); return }
+            if (email === '') { setError('Email is required'); return }
+            if (password === '') { setError('Password is required'); return }
+
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            const isValidEmail = emailRegex.test(email)
+
+            if (!isValidEmail) {
+                setError('Please enter a valid email address')
+                return
+            }
+
+            const strength = getPasswordStrength(password)
+            if (strength < 4) {
+                setError('Password must be at least 8 characters and include uppercase, numbers, and special characters')
+                return
+            }
+
             const response = await fetch('http://localhost:3000/api/auth/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -53,7 +88,9 @@ const RegisterPage = () => {
                             <Label htmlFor="Name" className="px-2">Name</Label>
                             <div className="relative">
                                 <User className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
-                                <Input className="rounded-full pl-9" placeholder="Enter your name" type="name" value={name} onChange={(e) => setName(e.target.value)} />
+                                <Input className="rounded-full pl-9" placeholder="Enter your name" type="name" value={name} onChange={(e) => setName(e.target.value)} onKeyDown={(e) => {
+                                    if (e.key === "Enter") handleRegister()
+                                }} />
                             </div>
                         </div>
                         {/* Email Input */}
@@ -61,7 +98,9 @@ const RegisterPage = () => {
                             <Label htmlFor="Email" className="px-2">Email</Label>
                             <div className="relative">
                                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
-                                <Input className="rounded-full pl-9" placeholder="Enter your email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                                <Input className="rounded-full pl-9" placeholder="Enter your email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} onKeyDown={(e) => {
+                                    if (e.key === "Enter") handleRegister()
+                                }} />
                             </div>
                         </div>
                         {/* Password Input */}
@@ -69,8 +108,25 @@ const RegisterPage = () => {
                             <Label htmlFor="Password" className="px-2">Password</Label>
                             <div className="relative">
                                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
-                                <Input className="rounded-full pl-9" placeholder="Enter your password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                                <Input className="rounded-full pl-9" placeholder="Enter your password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} onKeyDown={(e) => {
+                                    if (e.key === "Enter") handleRegister()
+                                }} />
                             </div>
+                            {password && (
+                                <div className="flex flex-col gap-1.5 px-2">
+                                    <div className="flex gap-1">
+                                        {[0, 1, 2, 3].map((i) => (
+                                            <div
+                                                key={i}
+                                                className={`h-1.5 flex-1 rounded-full transition-colors ${i < getPasswordStrength(password) ? STRENGTH_COLORS[getPasswordStrength(password)] : "bg-muted"}`}
+                                            />
+                                        ))}
+                                    </div>
+                                    <p className="text-xs text-muted-foreground whitespace-nowrap">
+                                        8+ chars, uppercase, number, special char
+                                    </p>
+                                </div>
+                            )}
                         </div>
                         {/* Button */}
                         <Button className="w-full rounded-full" onClick={handleRegister}>Register</Button>

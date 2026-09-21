@@ -18,19 +18,22 @@ const AuthContext = createContext<AuthContextType | null>(null) // createContext
 
 const AuthProvider = ({ children }: { children: ReactNode }) => { // the component that wraps your app and provides data to the global state and maintains it
     // {children} is whatever components are wrapped inside AuthProvider
-    const [user, setUser] = useState<User | null>(null) // this means it starts with no user logged in
+    const [user, setUser] = useState<User | null>(
+        localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')!) : null) // if something exists in localStorage for 'user', parse it, otherwise use null". The ! tells TypeScript we know it's not null at that point.
     const [token, setToken] = useState<string | null>(localStorage.getItem('token')) // when the app loads, check if a token was already saved from a previous login. This keeps the usert logged in even after refreshing the page
 
     const login = (user: User, token: string) => {
         setUser(user)
         setToken(token)
         localStorage.setItem('token', token) // saves token to localStorage
+        localStorage.setItem('user', JSON.stringify(user))
     }
 
     const logout = () => {
         setUser(null)
         setToken(null)
         localStorage.removeItem('token') // removes token from localStorage
+        localStorage.removeItem('user') // removes user from localStorage
     }
 
     const isAuthenticated = !!token // the '!!' converts the token to a boolean. If token exists, it's true, if null, it's false

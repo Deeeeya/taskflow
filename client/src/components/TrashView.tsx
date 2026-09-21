@@ -2,6 +2,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useState, useEffect } from "react";
 import { Trash2, RotateCcw, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "./ui/dialog";
 
 const PRIORITY_STYLES: Record<string, string> = {
     high: "bg-red-500/10 text-red-600 dark:text-red-400",
@@ -30,6 +31,7 @@ interface Task {
 export const TrashView = () => {
     const { token } = useAuth()
     const [tasks, setTasks] = useState<Task[]>([])
+    const [taskToDelete, setTaskToDelete] = useState<string | null>(null) // stores the id of the task the user wants to permanently delete
     const [error, setError] = useState<string>('')
 
     useEffect(() => {
@@ -140,7 +142,7 @@ export const TrashView = () => {
                                 <Button
                                     variant="destructive"
                                     size="sm"
-                                    onClick={() => handlePermDelete(task.id)}
+                                    onClick={() => setTaskToDelete(task.id)}
                                 >
                                     <Trash2 />
                                     Delete Forever
@@ -150,6 +152,32 @@ export const TrashView = () => {
                     ))}
                 </div>
             )}
+
+            <Dialog open={taskToDelete !== null} onOpenChange={(open) => { if (!open) setTaskToDelete(null) }}>
+                <DialogContent className="bg-background rounded-2xl border border-primary/30 shadow-lg shadow-primary/10">
+                    <DialogHeader>
+                        <DialogTitle className="text-xl">Delete task permanently?</DialogTitle>
+                        <DialogDescription>
+                            This action cannot be undone. The task will be permanently removed.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter>
+                        <Button variant="outline" onClick={() => setTaskToDelete(null)}>
+                            Cancel
+                        </Button>
+                        <Button
+                            variant="destructive"
+                            onClick={() => {
+                                handlePermDelete(taskToDelete!)
+                                setTaskToDelete(null)
+                            }}
+                        >
+                            <Trash2 />
+                            Delete Forever
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </div>
     )
 }
