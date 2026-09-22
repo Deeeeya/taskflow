@@ -13,9 +13,12 @@ const LoginPage = () => {
     const [error, setError] = useState('')
     const navigate = useNavigate() // we define navigate to use to redirect after data is stored
     const { login } = useAuth() // since we are destructuring an object from useAuth(), we use brackets, not parenthesis
+    const [isLoading, setIsLoading] = useState<boolean>(false)
 
     const handleLogin = async () => {
         try {
+            setIsLoading(true)
+
             const response = await fetch('http://localhost:3000/api/auth/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -33,6 +36,8 @@ const LoginPage = () => {
 
         } catch {
             setError('Something went wrong')
+        } finally {
+            setIsLoading(false)
         }
     }
 
@@ -72,7 +77,7 @@ const LoginPage = () => {
                             </div>
                         </div>
                         {/* Button */}
-                        <Button onClick={handleLogin} className="w-full rounded-full">Login</Button>
+                        <Button onClick={handleLogin} className="w-full rounded-full" disabled={isLoading}>{isLoading ? 'Logging in...' : 'Login'}</Button>
                         <p className="text-sm text-muted-foreground">
                             Don't have an account? <Link to="/register" className="text-primary hover:underline">Register</Link>
                         </p>

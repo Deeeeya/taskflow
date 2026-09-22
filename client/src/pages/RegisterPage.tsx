@@ -28,10 +28,13 @@ const RegisterPage = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
+    const [isLoading, setIsLoading] = useState<boolean>(false)
     const navigate = useNavigate()
 
     const handleRegister = async () => {
         try {
+            setIsLoading(true)
+
             if (name === '') { setError('Name is required'); return }
             if (email === '') { setError('Email is required'); return }
             if (password === '') { setError('Password is required'); return }
@@ -65,6 +68,8 @@ const RegisterPage = () => {
             }
         } catch {
             setError('Something went wrong')
+        } finally {
+            setIsLoading(false)
         }
     }
 
@@ -129,7 +134,7 @@ const RegisterPage = () => {
                             )}
                         </div>
                         {/* Button */}
-                        <Button className="w-full rounded-full" onClick={handleRegister}>Register</Button>
+                        <Button className="w-full rounded-full" onClick={handleRegister} disabled={isLoading}>{isLoading ? 'Registering...' : 'Register'}</Button>
                         <p className="text-sm text-muted-foreground">
                             Already have an account? <Link to="/login" className="text-primary hover:underline">Login</Link>
                         </p>
