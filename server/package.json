@@ -7,6 +7,7 @@
     "dev": "nodemon --exec node --loader ts-node/esm src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
+    "postbuild": "prisma generate",
     "db:push": "prisma db push --schema=prisma/schema.prisma",
     "db:migrate": "prisma migrate dev --schema=prisma/schema.prisma",
     "db:studio": "prisma studio --schema=prisma/schema.prisma"
