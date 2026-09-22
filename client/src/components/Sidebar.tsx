@@ -1,7 +1,6 @@
 import { Plus, Inbox, Calendar, CalendarDays, CheckCircle2, Hash, Settings, Trash2, Sun, Moon, LogOut, PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import { Button } from "./ui/button";
 import { useAuth } from "@/context/AuthContext";
-import { useTheme } from "@/context/ThemeContext";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator, DropdownMenuLabel } from "./ui/dropdown-menu";
 
 interface SidebarProps { // props interface
@@ -17,8 +16,6 @@ interface SidebarProps { // props interface
 
 export const Sidebar = ({ projects, onNewProject, activeProjectId, onSelectProject, isCollapsed, onToggleCollapse, onSelectView, onOpenSettings }: SidebarProps) => {
     const { user, logout } = useAuth()
-    const { theme, toggleTheme } = useTheme()
-
     const initial = user?.name?.[0]?.toUpperCase() // initial is being set to the usernames first letter and is setting it to uppercase, however its checking to see if user and name exists with the '?' as it could be null
 
     // collapses an entire section (icons included) to nothing - width and opacity animate together
@@ -103,18 +100,6 @@ export const Sidebar = ({ projects, onNewProject, activeProjectId, onSelectProje
                         <span className="whitespace-nowrap">{project.name}</span>
                     </Button>
                 ))}
-            </div>
-
-            {/* Bottom Section */}
-            <div className={`mt-auto p-2 flex items-center justify-start gap-2 ${section}`}>
-                {/* Theme Toggle Button */}
-                <Button variant="ghost" size="icon-sm" onClick={toggleTheme} className="rounded-md">
-                    {theme == 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-                </Button>
-                {/* Logout Button */}
-                <Button variant="ghost" size="icon-sm" onClick={logout} className="rounded-md">
-                    <LogOut className="w-4 h-4" />
-                </Button>
             </div>
         </aside>
     )

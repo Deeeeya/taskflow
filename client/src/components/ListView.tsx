@@ -1,6 +1,7 @@
 import { useAuth } from "@/context/AuthContext";
 import { useState, useEffect, useMemo } from "react";
 import { Circle, Calendar, Loader2 } from "lucide-react";
+import { TaskDetailModal } from "./TaskDetailModal";
 
 interface Task {
     id: string,
@@ -29,8 +30,11 @@ const formatDueDate = (dueDate: string) => {
     return date.toLocaleDateString(undefined, { month: "short", day: "numeric" })
 }
 
-const TaskRow = ({ task }: { task: Task }) => (
-    <div className="flex items-center gap-3 rounded-lg px-3 py-2 hover:bg-muted/40 transition-colors">
+const TaskRow = ({ task, onSelect }: { task: Task, onSelect: (task: Task) => void }) => (
+    <div
+        onClick={() => onSelect(task)}
+        className="flex items-center gap-3 rounded-lg px-3 py-2 hover:bg-muted/40 transition-colors cursor-pointer"
+    >
         <Circle className="w-4 h-4 text-muted-foreground shrink-0" />
         <span className="text-sm flex-1 truncate">{task.title}</span>
         {task.dueDate && (
@@ -45,12 +49,12 @@ const TaskRow = ({ task }: { task: Task }) => (
     </div>
 )
 
-const ListSection = ({ label, tasks }: { label: string, tasks: Task[] }) => (
+const ListSection = ({ label, tasks, onSelect }: { label: string, tasks: Task[], onSelect: (task: Task) => void }) => (
     <div className="flex flex-col gap-2">
         <p className="text-sm uppercase text-muted-foreground font-medium">{label}</p>
         <div className="flex flex-col gap-1 rounded-xl bg-card ring-1 ring-foreground/10 p-1">
             {tasks.map((task) => (
-                <TaskRow key={task.id} task={task} />
+                <TaskRow key={task.id} task={task} onSelect={onSelect} />
             ))}
             {tasks.length === 0 && (
                 <p className="text-xs text-muted-foreground/60 text-center py-4">No tasks</p>
@@ -64,6 +68,7 @@ export const ListView = ({ projectId }: ListViewProps) => {
     const [tasks, setTasks] = useState<Task[]>([])
     const [error, setError] = useState('')
     const [isLoading, setIsLoading] = useState(true)
+    const [selectedTask, setSelectedTask] = useState<Task | null>(null)
 
     useEffect(() => {
         const fetchTasks = async () => {
@@ -104,9 +109,18 @@ export const ListView = ({ projectId }: ListViewProps) => {
     return (
         <div className="w-full flex flex-col gap-4">
             {error && <p className="text-destructive text-sm">{error}</p>}
-            <ListSection label="To Do" tasks={todoTasks} />
-            <ListSection label="In Progress" tasks={inProgressTasks} />
-            <ListSection label="Done" tasks={doneTasks} />
+            <ListSection label="To Do" tasks={todoTasks} onSelect={setSelectedTask} />
+            <ListSection label="In Progress" tasks={inProgressTasks} onSelect={setSelectedTask} />
+            <ListSection label="Done" tasks={doneTasks} onSelect={setSelectedTask} />
+            <TaskDetailModal
+                projectId={projectId}
+                token={token}
+                selectedTask={selectedTask}
+                onClose={() => setSelectedTask(null)}
+                onTaskUpdated={(updatedTask) => setTasks((prev) => prev.map((task) => task.id === updatedTask.id ? updatedTask : task))}
+                onTaskDeleted={(taskId) => setTasks((prev) => prev.filter((task) => task.id !== taskId))}
+                onError={(message) => setError(message)}
+            />
         </div>
     )
 }
