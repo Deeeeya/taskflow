@@ -34,7 +34,6 @@ export const createProject = async (req: AuthRequest, res: Response) => {
         })
         return res.status(201).json(newProject)
     } catch (err) {
-        console.log('Error:', err)
         return res.status(500).json({ error: 'Internal server error' })
     }
 }

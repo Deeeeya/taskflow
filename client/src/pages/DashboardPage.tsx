@@ -29,8 +29,6 @@ const DashboardPage = () => {
     const [activeView, setActiveView] = useState<'inbox' | 'today' | 'upcoming' | 'completed' | 'trash' | null>(null)
     const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false)
 
-    console.log(activeView)
-
     useEffect(() => { // runs the fetchProjects function whenever token changes
         const fetchProjects = async () => { // an async function that makes a GET request to the backend with the JWT token in the header
             try {
