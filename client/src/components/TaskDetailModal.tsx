@@ -69,7 +69,7 @@ export const TaskDetailModal = ({
         try {
             if (!selectedTask) return
 
-            const response = await fetch(`http://localhost:3000/api/projects/${projectId}/tasks/${selectedTask.id}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/projects/${projectId}/tasks/${selectedTask.id}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -100,7 +100,7 @@ export const TaskDetailModal = ({
         try {
             if (!selectedTask) return
 
-            const response = await fetch(`http://localhost:3000/api/projects/${projectId}/tasks/${selectedTask.id}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/projects/${projectId}/tasks/${selectedTask.id}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',

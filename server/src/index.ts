@@ -11,7 +11,12 @@ const PORT = process.env.PORT || 3000 // use the env's port if it exists, otherw
 
 app.use(express.json()) // tells Express to parse incoming JSON requesy bodies (without this, req.body will be undefined)
 
-app.use(cors({ origin: 'http://localhost:5173' })) // tells Express to allow requests specifically from your React app
+app.use(cors({
+    origin: [
+        'http://localhost:5173',
+        'https://your-app.vercel.app'
+    ]
+})) // tells Express to allow requests specifically from your React app
 
 app.use('/api/auth', authRouter) // all auth routes will be prefixed with /api/auth, so register becomes /api/auth/register and login becomes /api/auth/login
 

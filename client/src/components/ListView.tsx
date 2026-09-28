@@ -73,7 +73,7 @@ export const ListView = ({ projectId }: ListViewProps) => {
     useEffect(() => {
         const fetchTasks = async () => {
             try {
-                const response = await fetch(`http://localhost:3000/api/projects/${projectId}/tasks`, {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/projects/${projectId}/tasks`, {
                     method: 'GET',
                     headers: { Authorization: `Bearer ${token}` }
                 })

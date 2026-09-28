@@ -63,7 +63,7 @@ export const SmartView = ({ view }: SmartViewProps) => {
     useEffect(() => {
         const fetchTasks = async () => {
             try {
-                const response = await fetch('http://localhost:3000/api/tasks', {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/tasks`, {
                     method: 'GET',
                     headers: { Authorization: `Bearer ${token}` }
                 })

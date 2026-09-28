@@ -38,7 +38,7 @@ export const TrashView = () => {
     useEffect(() => {
         const fetchTasks = async () => {
             try {
-                const response = await fetch('http://localhost:3000/api/tasks/trash', {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/tasks/trash`, {
                     method: 'GET',
                     headers: { Authorization: `Bearer ${token}` }
                 })
@@ -61,7 +61,7 @@ export const TrashView = () => {
 
     const handleRestore = async (id: string) => {
         try {
-            const response = await fetch(`http://localhost:3000/api/tasks/trash/${id}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/tasks/trash/${id}`, {
                 method: 'PATCH',
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -82,7 +82,7 @@ export const TrashView = () => {
 
     const handlePermDelete = async (id: string) => {
         try {
-            const response = await fetch(`http://localhost:3000/api/tasks/trash/${id}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/tasks/trash/${id}`, {
                 method: 'DELETE',
                 headers: {
                     Authorization: `Bearer ${token}`

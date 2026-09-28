@@ -19,7 +19,7 @@ const LoginPage = () => {
         try {
             setIsLoading(true)
 
-            const response = await fetch('http://localhost:3000/api/auth/login', {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password }) // this converts your JavaScript object into a JSON string so it can be sent over the network
