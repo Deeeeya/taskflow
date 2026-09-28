@@ -1,5 +1,5 @@
 // single instance of PrismaClient that the whole app will share
-import { PrismaClient } from "../generated/prisma/index.js"
+import { PrismaClient } from "../../dist/generated/prisma/index.js"
 
 const prisma = new PrismaClient() // instance
 
