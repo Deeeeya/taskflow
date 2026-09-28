@@ -1,4 +1,4 @@
-import { Plus, Inbox, Calendar, CalendarDays, CheckCircle2, Hash, Settings, Trash2, Sun, Moon, LogOut, PanelLeftClose, PanelLeftOpen } from "lucide-react";
+import { Plus, Inbox, Calendar, CalendarDays, CheckCircle2, Hash, Settings, Trash2, LogOut, PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import { Button } from "./ui/button";
 import { useAuth } from "@/context/AuthContext";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator, DropdownMenuLabel } from "./ui/dropdown-menu";

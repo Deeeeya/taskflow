@@ -24,7 +24,6 @@ const DashboardPage = () => {
     const [activeProjectId, setActiveProjectId] = useState<string | null>(null) // tracks which project is selected in the sidebar, starts as null
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false) // tracks whether the create project modal is open, starts as false
     const [isCollapsed, setIsCollapsed] = useState<boolean>(false) // tracks if the sidebar is collapsed or not
-    const [error, setError] = useState('') // stores any error messages to display to the user
     const [view, setView] = useState<'board' | 'list'>('board')
     const [activeView, setActiveView] = useState<'inbox' | 'today' | 'upcoming' | 'completed' | 'trash' | null>(null)
     const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false)
@@ -40,12 +39,12 @@ const DashboardPage = () => {
                 const data = await response.json()
 
                 if (!response.ok) {
-                    setError(data.error)
+                    console.error('Failed to fetch projects:', data.error)
                 } else {
                     setProjects(data)
                 }
             } catch {
-                setError('Something went wrong')
+                console.error
             }
         }
         fetchProjects() // useEffect doesn't allow its callback to be async directly, so we have to define the async function inside and then call it on the next line
