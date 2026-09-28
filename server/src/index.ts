@@ -14,7 +14,7 @@ app.use(express.json()) // tells Express to parse incoming JSON requesy bodies (
 app.use(cors({
     origin: [
         'http://localhost:5173',
-        'https://your-app.vercel.app'
+        'https://taskflow-three-rosy-49.vercel.app'
     ]
 })) // tells Express to allow requests specifically from your React app
 
